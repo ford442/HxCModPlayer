@@ -369,30 +369,7 @@ int main(int argc, char *argv[])
 							printf("\t\t\t\t\t\t\t<div style=\"font-size: 55%%\x3B\">Effects: ");
 							for(j=0;j<32;j++)
 							{
-								if(modctx->effects_event_counts[j])
-								{
-									if(j < 0x10 )
-									{
-										if(j!=0xE)
-										{
-											if(!first_effect)
-											{
-												printf(",");
-											}
-											printf(" %s",effectlist[j]);
-											first_effect = 0;
-										}
-									}
-									else
-									{
-										if(!first_effect)
-										{
-											printf(",");
-										}
-										printf(" %s", exteffectlist[j - 0x10] );
-										first_effect = 0;
-									}
-								}
+								
 							}
 							printf("</div>\n");
 
