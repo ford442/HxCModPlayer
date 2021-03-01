@@ -3,12 +3,12 @@ EMCC=emcc
 
 INCLUDES = -I ../
 
-CFLAGS=-O3 $(INCLUDES) -Wall -DEFFECTS_USAGE_STATE -DHXCMOD_MAXCHANNELS=999
+CFLAGS=-O3 $(INCLUDES) -Wall -HXCMOD_USE_PRECALC_VOLUME_TABLE -DEFFECTS_USAGE_STATE -HXCMOD_CLIPPING_CHECK
 LDFLAGS= -lc
 
-EMCC_CFLAGS=-O3 $(INCLUDES) -Wall -DHXCMOD_MAXCHANNELS=999
+EMCC_CFLAGS=-O3 -s ENVIRONMENT=web -s TOTAL_MEMORY=1400mb -s ALLOW_MEMORY_GROWTH=0 -s -FILESYSTEM=0 -s MALLOC="emmalloc" $(INCLUDES) -Wall 
 EMCC_LDFLAGS_WASM=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s BINARYEN=1 -s BINARYEN_METHOD='native-wasm'
-EMCC_LDFLAGS=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s WASM=0 -s LEGACY_VM_SUPPORT=1
+EMCC_LDFLAGS=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s SINGLE_FILE=1 -s LEGACY_VM_SUPPORT=1
 
 all: generate_html js_hxcmod_player_asmjs.js js_hxcmod_player_wasm.js
 	cp js_hxcmod_player_asmjs.js ./www
@@ -29,6 +29,9 @@ hxcmod.bc: ../hxcmod.c
 
 js_hxcmod_player.bc: js_hxcmod_player.c
 	$(EMCC) -o $@ -c $< $(EMCC_CFLAGS)
+	
+1i_hxcmod_player.bc: 1i_hxcmod_player.c
+	$(EMCC) -o $@ -c $< $(EMCC_CFLAGS)
 
 js_hxcmod_player_asmjs.js: hxcmod.bc js_hxcmod_player.bc
 	$(EMCC) -o $@    $^ $(EMCC_LDFLAGS)
@@ -36,6 +39,8 @@ js_hxcmod_player_asmjs.js: hxcmod.bc js_hxcmod_player.bc
 js_hxcmod_player_wasm.js: hxcmod.bc js_hxcmod_player.bc
 	$(EMCC) -o $@    $^ $(EMCC_LDFLAGS_WASM)
 
+1i_hxcmod_player_wasm.js: hxcmod.bc 1i_hxcmod_player.bc
+	$(EMCC) -o $@    $^ $(EMCC_LDFLAGS_WASM)
 clean:
 	rm -rf *.o
 	rm -rf *.so
