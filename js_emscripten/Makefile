@@ -3,12 +3,12 @@ EMCC=emcc
 
 INCLUDES = -I ../
 
-CFLAGS=-O3 -HXCMOD_USE_PRECALC_VOLUME_TABLE -DEFFECTS_USAGE_STATE -HXCMOD_CLIPPING_CHECK $(INCLUDES) -Wall 
+CFLAGS=-O3$(INCLUDES) -Wall 
 LDFLAGS= -lc
 
 EMCC_CFLAGS=-O3 -s ENVIRONMENT=web -s TOTAL_MEMORY=1400mb -s ALLOW_MEMORY_GROWTH=0 -s -FILESYSTEM=0 -s MALLOC="emmalloc" $(INCLUDES) -Wall 
-EMCC_LDFLAGS_WASM=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s BINARYEN=1 -s BINARYEN_METHOD='native-wasm'
-EMCC_LDFLAGS=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s SINGLE_FILE=1 -s LEGACY_VM_SUPPORT=1
+EMCC_LDFLAGS_WASM=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s BINARYEN=1 -s BINARYEN_METHOD='native-wasm'  -HXCMOD_USE_PRECALC_VOLUME_TABLE -DEFFECTS_USAGE_STATE -HXCMOD_CLIPPING_CHECK 
+EMCC_LDFLAGS=-s EXPORTED_FUNCTIONS="['_malloc','_free','_loadMod','_getNextSoundData','_unloadMod','_main']" -s SINGLE_FILE=1 -s LEGACY_VM_SUPPORT=1  -HXCMOD_USE_PRECALC_VOLUME_TABLE -DEFFECTS_USAGE_STATE -HXCMOD_CLIPPING_CHECK 
 
 all: generate_html js_hxcmod_player_asmjs.js js_hxcmod_player_wasm.js
 	cp js_hxcmod_player_asmjs.js ./www
